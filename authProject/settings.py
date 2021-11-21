@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 
 from pathlib import Path
 from datetime import timedelta
+import django_heroku
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -26,8 +27,6 @@ SECRET_KEY = 'django-insecure-a$sbxk7p)#ok=yf+%_$^_xfo=9ogzaccn#hgadkiyzjpik4(33
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
-CORS_ALLOW_ALL_ORIGINS = True
 
 # Application definition
 
@@ -40,14 +39,13 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'authApp',
-    'corsheaders',
 ]
 
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
     'ROTATE_REFRESH_TOKENS': False,
-    'BLACKLIST_AFTER_ROTATION': True,
+    'BLACKLIST_AFTER_ROTATION': False,
     'UPDATE_LAST_LOGIN': False,
 
     'ALGORITHM': 'HS256',
@@ -63,7 +61,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    "corsheaders.middleware.CorsMiddleware",
 ]
 
 REST_FRAMEWORK = {
@@ -72,7 +69,9 @@ REST_FRAMEWORK = {
     ),
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
-    )
+    ),
+    'TEST_REQUEST_DEFAULT_FORMAT': 'json'
+
 }
 
 AUTH_USER_MODEL = 'authApp.User'
@@ -104,11 +103,12 @@ WSGI_APPLICATION = 'authProject.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'd1rf6nsvtu5thp',
-        'USER': 'knojzrcjeftpeu',
-        'PASSWORD': 'b0500dbfc5ee77ed86c84acceedb18ef85fe7e71e6674dae484134ad0430d688',
-        'HOST': 'ec2-44-198-146-224.compute-1.amazonaws.com',
+        'NAME': 'd9kgoh2v1j166s',
+        'USER': 'exlrqtabmjsdap',
+        'PASSWORD': 'ac76fd4b9442782562db8d41a7bc2c06fd5627b41c6d29843ac586c2652a3661',
+        'HOST': 'ec2-34-198-189-252.compute-1.amazonaws.com',
         'PORT': '5432',
+        'TEST': {'MIRROR': 'default',},
     }
 }
 
@@ -158,7 +158,5 @@ STATIC_URL = '/static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-
-import django_heroku
 django_heroku.settings(locals())
 
